@@ -5,7 +5,7 @@
 	<artifactId>Flat</artifactId>
 	<version>0.0.1</version>
 	<name>Flat</name>
-	<description>Flatten JSON objects</description>
+	<description>Flattens JSON objects</description>
 
 	<licenses>
 		<license>
@@ -44,5 +44,10 @@
 	</dependencies>
 	<scm>
 		<url>https://github.com/adaxi/Flat</url>
+		<developerConnection>Gérik Bonaert</developerConnection>
 	</scm>
+	<issueManagement>
+		<url>https://github.com/adaxi/Flat</url>
+		<system>Github</system>
+	</issueManagement>
 </project>
