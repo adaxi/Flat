@@ -73,7 +73,7 @@ public class SerializationTest {
 	
 	@Test
 	public void testFlattenWithCustomDelimiters() throws JSONException {
-		String flatJsonSring = Flat.flatten(complexJson, '/');
+		String flatJsonSring = Flat.flatten(complexJson, "/");
 		JSONObject flatJsonObject = new JSONObject(flatJsonSring);
 		
 		for (String key : complexJsonKeys) {
@@ -99,16 +99,31 @@ public class SerializationTest {
 	public void testUnflattenWithCustomDelimiters() throws JSONException {
 		JSONObject expectedJsonObject = new JSONObject(complexJson);
 		
-		String flatJsonSring = Flat.flatten(complexJson, '/');
+		String flatJsonSring = Flat.flatten(complexJson, "/");
 		JSONObject flatJsonObject = new JSONObject(flatJsonSring);
 		
-		JSONObject unflattenedJsonObject = Flat.unflattenToJSONObject(flatJsonObject, '/');
+		JSONObject unflattenedJsonObject = Flat.unflattenToJSONObject(flatJsonObject, "/");
 		
 		assertTrue("The unflattened is not similar to the expected value", expectedJsonObject.similar(unflattenedJsonObject));
 	}
 	
+	@Test(expected=IllegalArgumentException.class)
+	public void illegalArgument() {
+		String jsonString = "{ \"a.b\": 1 }";
+		Flat.flatten(jsonString, ".");
+	}
+	
+	public void sameLevel() {
+		String jsonString = "{ \"a.1\": 1, \"a.b\": 1 }";
+		Flat.unflatten(jsonString, ".");
+		
+		String jsonStringReverse = "{ \"a.b\": 1, \"a.1\": 1 }";
+		Flat.unflatten(jsonStringReverse, ".");
+	}
+	
+	@Test
 	public void basicTestFlattenMethods() {
-		String jsonString = "{ \"a\": { \"b\": 1 }";
+		String jsonString = "{ \"a\": { \"b\": 1 }}";
 		JSONObject jsonObject = new JSONObject(jsonString);
 		
 		try {
@@ -124,13 +139,13 @@ public class SerializationTest {
 		}
 		
 		try {
-			Flat.flatten(jsonString, '-');
+			Flat.flatten(jsonString, "-");
 		} catch (Exception e) {
 			fail("Failed to flatten a json string with custom delimiter");
 		}
 		
 		try {
-			Flat.flatten(jsonObject, '-');
+			Flat.flatten(jsonObject, "-");
 		} catch (Exception e) {
 			fail("Failed to flatten a json object with custom delimiter");
 		}
@@ -148,22 +163,26 @@ public class SerializationTest {
 		}
 		
 		try {
-			Flat.flattenToJSONObject(jsonObject, '-');
+			Flat.flattenToJSONObject(jsonObject, "-");
 		} catch (Exception e) {
 			fail("Failed to flatten a json object to a json object with custom delimiter");
 		}
 		
 		try {
-			Flat.flattenToJSONObject(jsonObject, '-');
+			Flat.flattenToJSONObject(jsonObject, "-");
 		} catch (Exception e) {
 			fail("Failed to flatten a json object to a json object with custom delimiter");
 		}
 		
 	}
 	
+	@Test
 	public void basicTestUnFlattenMethods() {
-		String jsonString = "{ \"a\": { \"b\": 1 }";
+		String jsonString = "{ \"a.b\": 1 }}";
 		JSONObject jsonObject = new JSONObject(jsonString);
+		
+		String jsonStringCustomDelimiter = "{ \"a-b\": 1 }}";
+		JSONObject jsonObjectCustomDelimiter = new JSONObject(jsonString);
 		
 		try {
 			Flat.unflatten(jsonString);
@@ -178,13 +197,13 @@ public class SerializationTest {
 		}
 		
 		try {
-			Flat.unflatten(jsonString, '-');
+			Flat.unflatten(jsonStringCustomDelimiter, "-");
 		} catch (Exception e) {
 			fail("Failed to flatten a json string with custom delimiter");
 		}
 		
 		try {
-			Flat.unflatten(jsonObject, '-');
+			Flat.unflatten(jsonObjectCustomDelimiter, "-");
 		} catch (Exception e) {
 			fail("Failed to flatten a json object with custom delimiter");
 		}
@@ -202,17 +221,19 @@ public class SerializationTest {
 		}
 		
 		try {
-			Flat.unflattenToJSONObject(jsonObject, '-');
+			Flat.unflattenToJSONObject(jsonStringCustomDelimiter, "-");
 		} catch (Exception e) {
 			fail("Failed to flatten a json object to a json object with custom delimiter");
 		}
 		
 		try {
-			Flat.unflattenToJSONObject(jsonObject, '-');
+			Flat.unflattenToJSONObject(jsonObjectCustomDelimiter, "-");
 		} catch (Exception e) {
 			fail("Failed to flatten a json object to a json object with custom delimiter");
 		}
 		
 	}
+	
+	
 
 }
