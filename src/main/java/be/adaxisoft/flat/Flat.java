@@ -7,48 +7,133 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
+/**
+ *
+ * @author Gérik Bonaert <dev@adaxisoft.be>
+ */
 public class Flat {
 
+	/**
+	 * The default delimiter is used by methods that do not specify a delimiter.
+	 * The default value of the delimiter is '.' (dot).
+	 */
 	public static final String DEFAULT_DELIMITER = ".";
 
+	/**
+	 * This method flattens the given JSON object.
+	 * It will use the default delimiter.
+	 * Your keys cannot contain the default delimiter.
+	 *
+	 * @param jsonObject the JSON object to flatten
+	 * @return a string representation of the flattened JSON document.
+	 */
 	public static String flatten(JSONObject jsonObject) throws JSONException {
 		return flatten(jsonObject, DEFAULT_DELIMITER);
 	}
 
+	/**
+	 * This method flattens the string representation of the JSON object.
+	 * It will use the default delimiter.
+	 * Your keys cannot contain the default delimiter.
+	 *
+	 * @param jsonString the string representation of the JSON object.
+	 * @return a string representation of the flattened JSON document.
+	 * @throws JSONException when the given string cannot be parsed to a JSON object.
+	 */
 	public static String flatten(String jsonString) throws JSONException {
 		return flatten(jsonString, DEFAULT_DELIMITER);
 	}
 
+	/**
+	 * This method flattens the given JSON object.
+	 * Your keys cannot contain the given delimiter.
+	 *
+	 * @param jsonObject the JSON object to flatten
+	 * @param delimiter the delimiter to use when joining the keys.
+	 * @return a string representation of the flattened JSON document.
+	 */
 	public static String flatten(JSONObject jsonObject, String delimiter) throws JSONException {
 		String s = "{" + flatten(null, jsonObject, delimiter) + "}";
 		return s;
 	}
 
+	/**
+	 * This method flattens the string representation of the JSON object.
+	 * Your keys cannot contain the given delimiter.
+	 *
+	 * @param jsonString the string representation of the JSON object.
+	 * @param delimiter the delimiter to use when joining the keys.
+	 * @return a string representation of the flattened JSON document.
+	 * @throws JSONException when the given string cannot be parsed to a JSON object.
+	 */
 	public static String flatten(String jsonString, String delimiter) throws JSONException {
 		JSONObject jsonObject = new JSONObject(jsonString);
 		return flatten(jsonObject, delimiter);
 	}
 
+	/**
+	 * This method flattens the string representation of the JSON object.
+	 * It will use the default delimiter.
+	 * Your keys cannot contain the default delimiter.
+	 *
+	 * @param jsonString the string representation of the JSON object.
+	 * @return a flattened JSON object.
+	 * @throws JSONException when the given string cannot be parsed to a JSON object.
+	 */
 	public static JSONObject flattenToJSONObject(String jsonString)  throws JSONException {
 		String flatJsonString = flatten(jsonString);
 		return new JSONObject(flatJsonString);
 	}
 
+	/**
+	 * This method flattens the given JSON object.
+	 * It will use the default delimiter.
+	 * Your keys cannot contain the default delimiter.
+	 *
+	 * @param jsonObject the JSON object to flatten.
+	 * @return a flattened JSON object.
+	 */
 	public static JSONObject flattenToJSONObject(JSONObject jsonObject)  throws JSONException {
 		String flatJsonString = flatten(jsonObject);
 		return new JSONObject(flatJsonString);
 	}
 
+	/**
+	 * This method flattens the string representation of the JSON object.
+	 * Your keys cannot contain the given delimiter.
+	 *
+	 * @param jsonString the string representation of the JSON object.
+	 * @param delimiter the delimiter to use when joining the keys.
+	 * @return a flattened JSON object.
+	 * @throws JSONException when the given string cannot be parsed to a JSON object.
+	 */
 	public static JSONObject flattenToJSONObject(String jsonString, String delimiter)  throws JSONException {
 		String flatJsonString = flatten(jsonString, delimiter);
 		return new JSONObject(flatJsonString);
 	}
 
+	/**
+	 * This method flattens the string representation of the JSON object.
+	 * Your keys cannot contain the given delimiter.
+	 *
+	 * @param jsonObject the JSON object to flatten.
+	 * @param delimiter the delimiter to use when joining the keys.
+	 * @return a flattened JSON object.
+	 */
 	public static JSONObject flattenToJSONObject(JSONObject jsonObject, String delimiter)  throws JSONException {
 		String flatJsonString = flatten(jsonObject, delimiter);
 		return new JSONObject(flatJsonString);
 	}
 
+	/**
+	 * This method flattens the string representation of the JSON object.
+	 *
+	 * @param parent parent element of the object.
+	 * @param value object to flatten.
+	 * @param delimiter the delimiter to use when joining the keys.
+	 * @return a string representation of the flattened JSON object.
+	 */
 	private static String flatten(String parent, Object value, String delimiter) throws JSONException {
 		StringBuilder sb = new StringBuilder();
 
@@ -92,36 +177,109 @@ public class Flat {
 	}
 
 
+	/**
+	 * This method takes the string representation of a flattened JSON object
+	 * and returns it to the conventional format.
+	 * It will use the default delimiter.
+	 *
+	 * @param flatJsonString the string representation of the JSON object.
+	 * @return a string representation of a conventional JSON object.
+	 * @throws JSONException when the given string cannot be parsed to a JSON object.
+	 */
 	public static String unflatten(String flatJsonString) throws JSONException {
 		return unflatten(flatJsonString, DEFAULT_DELIMITER);
 	}
 
+	/**
+	 * This method takes a flattened JSON object and returns it to
+	 * the conventional format.
+	 * It will use the default delimiter.
+	 *
+	 * @param flatJsonObject the JSON object to unflatten.
+	 * @return a string representation of a conventional JSON object.
+	 */
 	public static String unflatten(JSONObject flatJsonObject) throws JSONException {
 		return unflatten(flatJsonObject, DEFAULT_DELIMITER);
 	}
 
+	/**
+	 * This method takes the string representation of a flattened JSON object
+	 * and returns it to the conventional format.
+	 * It will use the given delimiter.
+	 *
+	 * @param flatJsonString the JSON object to unflatten.
+	 * @param delimiter the delimiter to use when splitting the keys.
+	 * @return a string representation of a conventional JSON object.
+	 * @throws JSONException when the given string cannot be parsed to a JSON object.
+	 */
 	public static String unflatten(String flatJsonString, String delimiter) throws JSONException {
 		JSONObject flatJsonObject = new JSONObject(flatJsonString);
 		return unflatten(flatJsonObject, delimiter);
 	}
 
+	/**
+	 * This method takes a flattened JSON object and returns it to
+	 * the conventional format.
+	 * It will use the given delimiter.
+	 *
+	 * @param flatJsonObject the JSON object to unflatten.
+	 * @param delimiter the delimiter to use when splitting the keys.
+	 * @return a string representation of a conventional JSON object.
+	 */
 	public static String unflatten(JSONObject flatJsonObject, String delimiter) throws JSONException {
 		return unflattenToJSONObject(flatJsonObject, delimiter).toString();
 	}
 
+	/**
+	 * This method takes the string representation of a flattened JSON object
+	 * and returns it to the conventional format.
+	 * It will use the default delimiter.
+	 *
+	 * @param flatJsonString the string representation of the JSON object.
+	 * @return a conventional JSON object.
+	 * @throws JSONException when the given string cannot be parsed to a JSON object.
+	 */
 	public static JSONObject unflattenToJSONObject(String flatJsonObject) throws JSONException {
 		return unflattenToJSONObject(flatJsonObject, DEFAULT_DELIMITER);
 	}
 
+
+	/**
+	 * This method takes a flattened JSON object and returns it to
+	 * the conventional format.
+	 * It will use the default delimiter.
+	 *
+	 * @param flatJsonObject the JSON object to unflatten.
+	 * @return a conventional JSON object.
+	 */
 	public static JSONObject unflattenToJSONObject(JSONObject flatJsonObject) throws JSONException {
 		return unflattenToJSONObject(flatJsonObject, DEFAULT_DELIMITER);
 	}
 
+	/**
+	 * This method takes the string representation of a flattened JSON object
+	 * and returns it to the conventional format.
+	 * It will use the given delimiter.
+	 *
+	 * @param flatJsonString the JSON object to unflatten.
+	 * @param delimiter the delimiter to use when splitting the keys.
+	 * @return a conventional JSON object.
+	 * @throws JSONException when the given string cannot be parsed to a JSON object.
+	 */
 	public static JSONObject unflattenToJSONObject(String flatJsonString, String delimiter) throws JSONException {
 		JSONObject flatJsonObject = new JSONObject(flatJsonString);
 		return unflattenToJSONObject(flatJsonObject, delimiter);
 	}
 
+	/**
+	 * This method takes a flattened JSON object and returns it to
+	 * the conventional format.
+	 * It will use the given delimiter.
+	 *
+	 * @param flatJsonObject the JSON object to unflatten.
+	 * @param delimiter the delimiter to use when splitting the keys.
+	 * @return a conventional JSON object.
+	 */
 	public static JSONObject unflattenToJSONObject(JSONObject flatJsonObject, String delimiter) throws JSONException {
 		JSONObject decoded = new JSONObject();
 

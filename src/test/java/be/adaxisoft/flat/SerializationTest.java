@@ -9,7 +9,7 @@ import org.junit.Test;
 
 public class SerializationTest {
 
-	private String complexJson = "{ "  
+	private String complexJson = "{ "
 			+ " \"string\": \"aString\", "
 			+ " \"integer\": -1, "
 			+ " \"nested\": { "
