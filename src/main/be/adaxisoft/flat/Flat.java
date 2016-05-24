@@ -8,17 +8,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Flat {
-	
+
 	public static final String DEFAULT_DELIMITER = ".";
-	
+
 	public static String flatten(JSONObject jsonObject) throws JSONException {
 		return flatten(jsonObject, DEFAULT_DELIMITER);
 	}
-	
+
 	public static String flatten(String jsonString) throws JSONException {
 		return flatten(jsonString, DEFAULT_DELIMITER);
 	}
-	
+
 	public static String flatten(JSONObject jsonObject, String delimiter) throws JSONException {
 		String s = "{" + flatten(null, jsonObject, delimiter) + "}";
 		return s;
@@ -28,30 +28,30 @@ public class Flat {
 		JSONObject jsonObject = new JSONObject(jsonString);
 		return flatten(jsonObject, delimiter);
 	}
-	
+
 	public static JSONObject flattenToJSONObject(String jsonString)  throws JSONException {
 		String flatJsonString = flatten(jsonString);
 		return new JSONObject(flatJsonString);
 	}
-	
-    public static JSONObject flattenToJSONObject(JSONObject jsonObject)  throws JSONException {
+
+	public static JSONObject flattenToJSONObject(JSONObject jsonObject)  throws JSONException {
 		String flatJsonString = flatten(jsonObject);
 		return new JSONObject(flatJsonString);
 	}
-	
+
 	public static JSONObject flattenToJSONObject(String jsonString, String delimiter)  throws JSONException {
 		String flatJsonString = flatten(jsonString, delimiter);
 		return new JSONObject(flatJsonString);
 	}
-	
-    public static JSONObject flattenToJSONObject(JSONObject jsonObject, String delimiter)  throws JSONException {
+
+	public static JSONObject flattenToJSONObject(JSONObject jsonObject, String delimiter)  throws JSONException {
 		String flatJsonString = flatten(jsonObject, delimiter);
 		return new JSONObject(flatJsonString);
 	}
 
 	private static String flatten(String parent, Object value, String delimiter) throws JSONException {
 		StringBuilder sb = new StringBuilder();
-		
+
 		if (value instanceof JSONObject) {
 			JSONObject jsonObject = (JSONObject) value;
 			for (Iterator<String> i = jsonObject.keys(); i.hasNext();) {
@@ -90,16 +90,16 @@ public class Flat {
 
 		return sb.toString();
 	}
-	
-	
+
+
 	public static String unflatten(String flatJsonString) throws JSONException {
 		return unflatten(flatJsonString, DEFAULT_DELIMITER);
 	}
-	
+
 	public static String unflatten(JSONObject flatJsonObject) throws JSONException {
 		return unflatten(flatJsonObject, DEFAULT_DELIMITER);
 	}
-	
+
 	public static String unflatten(String flatJsonString, String delimiter) throws JSONException {
 		JSONObject flatJsonObject = new JSONObject(flatJsonString);
 		return unflatten(flatJsonObject, delimiter);
@@ -108,15 +108,15 @@ public class Flat {
 	public static String unflatten(JSONObject flatJsonObject, String delimiter) throws JSONException {
 		return unflattenToJSONObject(flatJsonObject, delimiter).toString();
 	}
-	
+
 	public static JSONObject unflattenToJSONObject(String flatJsonObject) throws JSONException {
 		return unflattenToJSONObject(flatJsonObject, DEFAULT_DELIMITER);
 	}
-	
+
 	public static JSONObject unflattenToJSONObject(JSONObject flatJsonObject) throws JSONException {
 		return unflattenToJSONObject(flatJsonObject, DEFAULT_DELIMITER);
 	}
-	
+
 	public static JSONObject unflattenToJSONObject(String flatJsonString, String delimiter) throws JSONException {
 		JSONObject flatJsonObject = new JSONObject(flatJsonString);
 		return unflattenToJSONObject(flatJsonObject, delimiter);
@@ -131,8 +131,8 @@ public class Flat {
 
 			Object json = decoded;
 			for (int j = 0; j < keys.length; j++) {
-				
-				
+
+
 				if (j == keys.length - 1) {
 					// We are at a leaf key
 					Object value = flatJsonObject.get(flattenedKey);
