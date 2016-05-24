@@ -2,11 +2,12 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>Flat</groupId>
   <artifactId>Flat</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1</version>
   <name>Flat</name>
   <description>Flatten JSON objects</description>
   <build>
-    <sourceDirectory>src</sourceDirectory>
+    <sourceDirectory>${basedir}/src/main</sourceDirectory>
+    <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -23,6 +24,12 @@
   		<groupId>org.json</groupId>
   		<artifactId>json</artifactId>
   		<version>20160212</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
+  		<version>4.12</version>
+  		<scope>test</scope>
   	</dependency>
   </dependencies>
 </project>

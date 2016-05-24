@@ -1,12 +1,13 @@
 package be.adaxisoft.flat;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-public class SerializationTests {
+public class SerializationTest {
 
 	private String complexJson = "{ "  
 			+ " \"string\": \"aString\", "
