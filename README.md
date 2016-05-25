@@ -35,7 +35,7 @@ It can also unflatten.
 Use the library
 ---------------
 
-The [documentation page](http://adaxi.github.io/Flat/dependency-info.html) list how you can add this library
+The [documentation page](http://adaxi.github.io/Flat/dependency-info.html) lists how you can add this library
 as a dependency of your project.
 
 
