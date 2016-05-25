@@ -1,5 +1,6 @@
 package be.adaxisoft.flat;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.regex.Pattern;
 
@@ -9,7 +10,6 @@ import org.json.JSONObject;
 
 
 /**
- *
  * @author Gérik Bonaert <dev@adaxisoft.be>
  */
 public class Flat {
@@ -287,6 +287,7 @@ public class Flat {
 			String flattenedKey = i.next();
 			String[] keys = flattenedKey.split(Pattern.quote(delimiter));
 
+			Object parent = null;
 			Object json = decoded;
 			for (int j = 0; j < keys.length; j++) {
 
@@ -299,65 +300,117 @@ public class Flat {
 						jsonObject.put(keys[j], value);
 					} else if (json instanceof JSONArray) {
 						JSONArray jsonArray = (JSONArray)json;
-						int index = Integer.parseInt(keys[j]);
-						jsonArray.put(index, value);
+						if (isNumber(keys[j])) {
+							int index = Integer.parseInt(keys[j]);
+							jsonArray.put(index, value);
+						} else {
+							// It was not an array after all, convert array to object
+							JSONObject jsonObject = new JSONObject();
+							for (int k = 0; k< jsonArray.length(); k++) {
+								String[] keyRoot = Arrays.copyOf(keys, keys.length-1);
+								StringBuilder sb = new StringBuilder();
+								for (int l = 0; l < keyRoot.length; l++) {
+									sb.append(keyRoot[l]).append(delimiter);
+								}
+								sb.append(k);
+								// here we need to check if the leaf we are moving exists and is null
+								if (!jsonArray.isNull(k) || flatJsonObject.has(sb.toString())) {
+									Object object = jsonArray.get(k);
+									jsonObject.put(Integer.toString(k), object);
+								}
+							}
+
+							if (parent instanceof JSONArray) {
+								JSONArray array = (JSONArray)parent;
+								int index = Integer.parseInt(keys[j - 1]);
+								array.put(index, jsonObject);
+							} else {
+								JSONObject object = (JSONObject)parent;
+								object.put(keys[j - 1], jsonObject);
+							}
+							jsonObject.put(keys[j], value);
+						}
+
 					}
 				} else {
-					// We are *not* at a leaf key
-					if (!isNumber(keys[j + 1])) {
-						// next index is an object
-						JSONObject childJsonObject;
 
-						if (json instanceof JSONObject) {
-							// The last index was an object: we're creating an object in an object
-							JSONObject jsonObject = (JSONObject)json;
-							if (jsonObject.has(keys[j])) {
-								childJsonObject = jsonObject.getJSONObject(keys[j]);
-							} else {
-								childJsonObject = new JSONObject();
-								jsonObject.put(keys[j], childJsonObject);
+					if (json instanceof JSONObject) {
+						// The last index was an object: we're creating an object in an object
+						JSONObject jsonObject = (JSONObject)json;
+						if (jsonObject.has(keys[j])) {
+							parent = json;
+							json = jsonObject.get(keys[j]);
+							// Assert that we are not handling a leaf
+							if (!(json instanceof JSONArray) && !(json instanceof JSONObject)) {
+								throw new AssertionError("Unhandled object type");
 							}
-						} else if (json instanceof JSONArray) {
-							// The last index was an array: we're creating an object in an array
-							JSONArray jsonArray = (JSONArray)json;
+						} else {
+							if (isNumber(keys[j + 1])) {
+								parent = json;
+								json = new JSONArray();
+								jsonObject.put(keys[j], json);
+							} else {
+								parent = json;
+								json = new JSONObject();
+								jsonObject.put(keys[j], json);
+							}
+						}
+					} else if (json instanceof JSONArray) {
+						// The last index was an array: we're creating an object in an array
+						JSONArray jsonArray = (JSONArray)json;
+						if (isNumber(keys[j])) {
 							int index = Integer.parseInt(keys[j]);
 							if (!jsonArray.isNull(index)) {
-								childJsonObject = jsonArray.getJSONObject(index);
+								parent = json;
+								json = jsonArray.get(index);
+								// Assert that we are not handling a leaf
+								if (!(json instanceof JSONArray) && !(json instanceof JSONObject)) {
+									throw new AssertionError("Unhandled object type");
+								}
 							} else {
-								childJsonObject = new JSONObject();
-								jsonArray.put(index, childJsonObject);
+								if (isNumber(keys[j + 1])) {
+									parent = json;
+									json = new JSONArray();
+									jsonArray.put(index, json);
+								} else {
+									parent = json;
+									json = new JSONObject();
+									jsonArray.put(index, json);
+								}
 							}
 						} else {
-							throw new AssertionError("Unhandled object type");
-						}
-						json = childJsonObject;
-					} else {
-						// The next index is an array element
-						JSONArray childJsonArray;
+							// It was not an array after all, convert array to object
+							JSONObject jsonObject = convertJSONArrayToJSONObject(jsonArray);
+							if (parent instanceof JSONArray) {
+								JSONArray array = (JSONArray)parent;
+								int index = Integer.parseInt(keys[j - 1]);
+								array.put(index, jsonObject);
+							} else {
+								JSONObject object = (JSONObject)parent;
+								object.put(keys[j - 1], jsonObject);
+							}
 
-						if (json instanceof JSONObject) {
-							// The last index was an object: we're creating an array in an object
-							JSONObject jsonObject = (JSONObject)json;
 							if (jsonObject.has(keys[j])) {
-								childJsonArray = jsonObject.getJSONArray(keys[j]);
+								parent = json;
+								json = jsonObject.get(keys[j]);
+								// Assert that we are not handling a leaf
+								if (!(json instanceof JSONArray) && !(json instanceof JSONObject)) {
+									throw new AssertionError("Unhandled object type");
+								}
 							} else {
-								childJsonArray = new JSONArray();
-								jsonObject.put(keys[j], childJsonArray);
+								if (isNumber(keys[j + 1])) {
+									parent = json;
+									json = new JSONArray();
+									jsonObject.put(keys[j], json);
+								} else {
+									parent = json;
+									json = new JSONObject();
+									jsonObject.put(keys[j], json);
+								}
 							}
-						} else if (json instanceof JSONArray) {
-							// The last index was an array: we're creating an array in an array
-							JSONArray jsonArray = (JSONArray)json;
-							int index = Integer.parseInt(keys[j + 1]);
-							if (!jsonArray.isNull(index)) {
-								childJsonArray = jsonArray.getJSONArray(index);
-							} else {
-								childJsonArray = new JSONArray();
-								jsonArray.put(index, childJsonArray);
-							}
-						} else {
-							throw new AssertionError("Unhandled object type");
 						}
-						json = childJsonArray;
+					} else {
+						throw new AssertionError("Unhandled object type");
 					}
 				}
 			}
@@ -372,5 +425,16 @@ public class Flat {
 		} catch (NumberFormatException e) {
 			return false;
 		}
+	}
+
+	private static JSONObject convertJSONArrayToJSONObject(JSONArray jsonArray) {
+		JSONObject jsonObject = new JSONObject();
+		for (int k = 0; k< jsonArray.length(); k++) {
+			if (!jsonArray.isNull(k)) { // Not the best option!
+				Object object = jsonArray.get(k);
+				jsonObject.put(Integer.toString(k), object);
+			}
+		}
+		return jsonObject;
 	}
 }

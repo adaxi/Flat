@@ -91,7 +91,6 @@ public class SerializationTest {
 		JSONObject flatJsonObject = new JSONObject(flatJsonSring);
 
 		JSONObject unflattenedJsonObject = Flat.unflattenToJSONObject(flatJsonObject);
-
 		assertTrue("The unflattened is not similar to the expected value", expectedJsonObject.similar(unflattenedJsonObject));
 	}
 
@@ -113,12 +112,84 @@ public class SerializationTest {
 		Flat.flatten(jsonString, ".");
 	}
 
-	public void sameLevel() {
-		String jsonString = "{ \"a.1\": 1, \"a.b\": 1 }";
-		Flat.unflatten(jsonString, ".");
+	@Test
+	public void flattenEmptyObject() {
+		JSONObject jsonObject = new JSONObject();
+		JSONObject expectedObject = new JSONObject();
+		JSONObject unflattenedJsonObject = Flat.flattenToJSONObject(jsonObject);
+		assertTrue("The unflattened is not similar to the expected value. "  + unflattenedJsonObject, expectedObject.similar(unflattenedJsonObject));
+	}
 
-		String jsonStringReverse = "{ \"a.b\": 1, \"a.1\": 1 }";
-		Flat.unflatten(jsonStringReverse, ".");
+	@Test
+	public void unflattenEmptyObject() {
+		JSONObject jsonObject = new JSONObject();
+		JSONObject expectedObject = new JSONObject();
+		JSONObject unflattenedJsonObject = Flat.unflattenToJSONObject(jsonObject);
+		assertTrue("The unflattened is not similar to the expected value. "  + unflattenedJsonObject, expectedObject.similar(unflattenedJsonObject));
+	}
+
+	@Test
+	public void arrayToObjectConversionWithObjectParent() {
+		JSONObject jsonObject = new JSONObject("{ \"a.2\": 1, \"a.1\": 1, \"a.B\": 1 }");
+		JSONObject expectedObject = new JSONObject("{ \"a\": { \"1\": 1, \"2\": 1, \"B\": 1 }}");
+		JSONObject unflattenedJsonObject = Flat.unflattenToJSONObject(jsonObject);
+		assertTrue("The unflattened is not similar to the expected value. "  + unflattenedJsonObject, expectedObject.similar(unflattenedJsonObject));
+	}
+
+	@Test
+	public void arrayToObjectConversionWithArrayParent() {
+		JSONObject jsonObject = new JSONObject("{ \"a.0.1\": 1, \"a.0.2\": 1, \"a.0.B\": 1 }");
+		JSONObject expectedObject = new JSONObject("{ \"a\": [ { \"1\": 1, \"2\": 1, \"B\": 1 } ]}");
+		JSONObject unflattenedJsonObject = Flat.unflattenToJSONObject(jsonObject);
+		assertTrue("The unflattened is not similar to the expected value. "  + unflattenedJsonObject, expectedObject.similar(unflattenedJsonObject));
+	}
+
+	@Test
+	public void nonLeafArrayToObjectConversionWithArrayParent() {
+		JSONObject jsonObject = new JSONObject("{ \"a.0.0.0\": 1, \"a.0.1.0\": 1, \"a.0.B.0\": 1 }");
+		JSONObject expectedObject = new JSONObject("{ \"a\": [ { \"1\": [1], \"0\": [1], \"B\": [1] } ]}");
+		JSONObject unflattenedJsonObject = Flat.unflattenToJSONObject(jsonObject);
+		assertTrue("The unflattened is not similar to the expected value. "  + unflattenedJsonObject, expectedObject.similar(unflattenedJsonObject));
+	}
+
+	@Test
+	public void nonLeafArrayToObjectConversionWithObjectParent() {
+		JSONObject jsonObject = new JSONObject("{ \"a.0.0\": 1, \"a.1.0\": 1, \"a.B.0\": 1 }");
+		JSONObject expectedObject = new JSONObject("{ \"a\": { \"1\": [1], \"0\": [1], \"B\": [1] } }");
+		JSONObject unflattenedJsonObject = Flat.unflattenToJSONObject(jsonObject);
+		assertTrue("The unflattened is not similar to the expected value. "  + unflattenedJsonObject, expectedObject.similar(unflattenedJsonObject));
+	}
+
+	@Test
+	public void baseArrayToObjectConversion() {
+		JSONObject jsonObject = new JSONObject("{ \"1\": 1, \"B\": 1 }");
+		JSONObject expectedObject = new JSONObject("{ \"1\": 1, \"B\": 1 }");
+		JSONObject unflattenedJsonObject = Flat.unflattenToJSONObject(jsonObject);
+		assertTrue("The unflattened is not similar to the expected value. "  + unflattenedJsonObject, expectedObject.similar(unflattenedJsonObject));
+	}
+
+	@Test
+	public void objectToArrayConversion() {
+		JSONObject jsonObject = new JSONObject("{ \"a.B\": 1, \"a.1\": 1 }");
+		JSONObject expectedObject = new JSONObject("{ \"a\":{  \"1\": 1, \"B\": 1 } }");
+		JSONObject unflattenedJsonObject = Flat.unflattenToJSONObject(jsonObject);
+		assertTrue("The unflattened is not similar to the expected value. " + unflattenedJsonObject, expectedObject.similar(unflattenedJsonObject));
+	}
+
+	@Test
+	public void objectToArrayWithNull() {
+		JSONObject jsonObject = new JSONObject("{ \"a.0\": null, \"a.B\": 1 }");
+		JSONObject expectedObject = new JSONObject("{ \"a\":{  \"0\": null, \"B\": 1 } }");
+		JSONObject unflattenedJsonObject = Flat.unflattenToJSONObject(jsonObject);
+		assertTrue("The unflattened is not similar to the expected value. " + unflattenedJsonObject.toString(), expectedObject.similar(unflattenedJsonObject));
+	}
+
+	@Test
+	public void missingIndexes() {
+		JSONObject jsonObject = new JSONObject("{ \"a.1\": null, }");
+		JSONObject expectedObject = new JSONObject("{ \"a\": [ null, null ] }");
+		JSONObject unflattenedJsonObject = Flat.unflattenToJSONObject(jsonObject);
+		assertTrue("The unflattened is not similar to the expected value. " + unflattenedJsonObject.toString(), expectedObject.similar(unflattenedJsonObject));
 	}
 
 	@Test
@@ -233,7 +304,5 @@ public class SerializationTest {
 		}
 
 	}
-
-
 
 }

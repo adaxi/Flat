@@ -29,7 +29,7 @@ After:
 }
 ```
 
-It can also unflatten.
+The library can do the revese operation as well: unflatten.
 
 
 Use the library
@@ -37,24 +37,6 @@ Use the library
 
 The [documentation page](http://adaxi.github.io/Flat/dependency-info.html) lists how you can add this library
 as a dependency of your project.
-
-
-Limitations
------------
-
-The following example is not possible to unflatten with the current version of the library.
-
-```json
-
-{
-	"a.1": 1,
-	"a.x": 1
-}
-
-```
-
-The code will try to create an array with value 1 to index 1, then set the value 1 to index 'x' which fails.
-The result of such a JSON should be an object containing two keys: '1' and 'x'.
 
 Credit
 ------
