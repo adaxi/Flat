@@ -5,6 +5,40 @@ Flat
 
 This library flattens JSON files.
 
+Before:
+
+```json
+{
+	"key1": {
+		"keyA": "valueI"
+	},
+	"key2": {
+		"keyB": "valueII"
+	},
+	"key3": { "a": { "b": { "c": 2 } } }
+}
+```
+
+After:
+
+```json
+{
+   "key1.keyA": "valueI",
+   "key2.keyB": "valueII",
+   "key3.a.b.c": 2
+}
+```
+
+It can also unflatten.
+
+
+Use the library
+---------------
+
+The [documentation page](http://adaxi.github.io/Flat/dependency-info.html) list how you can add this library
+as a dependency of your project.
+
+
 Limitations
 -----------
 
