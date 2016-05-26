@@ -14,15 +14,21 @@ import org.json.JSONObject;
  */
 public class Flat {
 
-	private Flat() throws InstantiationException {
-		throw new InstantiationException("Instances of this type are forbidden");
-	}
 
 	/**
 	 * The default delimiter is used by methods that do not specify a delimiter.
 	 * The default value of the delimiter is '.' (dot).
 	 */
 	public static final String DEFAULT_DELIMITER = ".";
+	
+	/**
+	 * Prevent from instantiating this class.
+	 * 
+	 * @throws InstantiationException thrown when trying to instantiate this class.
+	 */
+	private Flat() throws InstantiationException {
+		throw new InstantiationException("Instances of this type are forbidden");
+	}
 
 	/**
 	 * This method flattens the given JSON object.
