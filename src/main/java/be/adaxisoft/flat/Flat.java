@@ -14,6 +14,10 @@ import org.json.JSONObject;
  */
 public class Flat {
 
+	private Flat() throws InstantiationException {
+		throw new InstantiationException("Instances of this type are forbidden");
+	}
+
 	/**
 	 * The default delimiter is used by methods that do not specify a delimiter.
 	 * The default value of the delimiter is '.' (dot).
@@ -393,23 +397,14 @@ public class Flat {
 								object.put(keys[j - 1], jsonObject);
 							}
 
-							if (jsonObject.has(keys[j])) {
+							if (isNumber(keys[j + 1])) {
 								parent = json;
-								json = jsonObject.get(keys[j]);
-								// Assert that we are not handling a leaf
-								if (!(json instanceof JSONArray) && !(json instanceof JSONObject)) {
-									throw new AssertionError("Unhandled object type");
-								}
+								json = new JSONArray();
+								jsonObject.put(keys[j], json);
 							} else {
-								if (isNumber(keys[j + 1])) {
-									parent = json;
-									json = new JSONArray();
-									jsonObject.put(keys[j], json);
-								} else {
-									parent = json;
-									json = new JSONObject();
-									jsonObject.put(keys[j], json);
-								}
+								parent = json;
+								json = new JSONObject();
+								jsonObject.put(keys[j], json);
 							}
 						}
 					} else {
