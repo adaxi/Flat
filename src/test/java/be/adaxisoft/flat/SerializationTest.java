@@ -1,7 +1,6 @@
 package be.adaxisoft.flat;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,105 +50,138 @@ public class SerializationTest {
 	@Test
 	public void flattenStringNoDelimiter() {
 		String jsonString = "{ \"a\": { \"b\": 1 }}";
-		Flat.flatten(jsonString);
+		String flatJsonString = "{ \"a.b\": 1 }}";
+		assertTrue("The flattened is not similar to the expected value. ", 
+				new JSONObject(Flat.flatten(jsonString)).similar(new JSONObject(flatJsonString)));
 	}
 
 	@Test
 	public void flattenStringWithDelimiter() {
 		String jsonString = "{ \"a\": { \"b\": 1 }}";
-		Flat.flatten(jsonString, "-");
+		String flatJsonString = "{ \"a-b\": 1 }}";
+		assertTrue("The flattened is not similar to the expected value. ", 
+				new JSONObject(Flat.flatten(jsonString, "-")).similar(new JSONObject(flatJsonString)));
 	}
 
 	@Test
 	public void flattenObjectNoDelimiter() {
 		String jsonString = "{ \"a\": { \"b\": 1 }}";
 		JSONObject jsonObject = new JSONObject(jsonString);
+		String flatJsonString = "{ \"a.b\": 1 }}";
 		Flat.flatten(jsonObject);
+		assertTrue("The flattened is not similar to the expected value. ", 
+				new JSONObject(Flat.flatten(jsonObject)).similar(new JSONObject(flatJsonString)));
 	}
 
 	@Test
 	public void flattenObjectWithDelimiter() {
 		String jsonString = "{ \"a\": { \"b\": 1 }}";
 		JSONObject jsonObject = new JSONObject(jsonString);
-		Flat.flatten(jsonObject, "-");
+		String flatJsonString = "{ \"a-b\": 1 }}";
+		assertTrue("The flattened is not similar to the expected value. ", 
+				new JSONObject(Flat.flatten(jsonObject, "-")).similar(new JSONObject(flatJsonString)));
 	}
 
 	@Test
 	public void flattenStringNoDelimiterToObject() {
 		String jsonString = "{ \"a\": { \"b\": 1 }}";
-		Flat.flattenToJSONObject(jsonString);
+		String flatJsonString = "{ \"a.b\": 1 }}";
+		assertTrue("The flattened is not similar to the expected value. ", 
+				Flat.flattenToJSONObject(jsonString).similar(new JSONObject(flatJsonString)));
 	}
 
 	@Test
 	public void flattenStringWithDelimiterToObject() {
 		String jsonString = "{ \"a\": { \"b\": 1 }}";
-		Flat.flattenToJSONObject(jsonString, "-");
+		String flatJsonString = "{ \"a-b\": 1 }}";
+		assertTrue("The flattened is not similar to the expected value. ", 
+				Flat.flattenToJSONObject(jsonString, "-").similar(new JSONObject(flatJsonString)));
 	}
 
 	@Test
 	public void flattenObjectNoDelimiterToObject() {
 		String jsonString = "{ \"a\": { \"b\": 1 }}";
 		JSONObject jsonObject = new JSONObject(jsonString);
-		Flat.flattenToJSONObject(jsonObject);
+		String flatJsonString = "{ \"a.b\": 1 }}";
+		assertTrue("The flattened is not similar to the expected value. ", 
+				Flat.flattenToJSONObject(jsonObject).similar(new JSONObject(flatJsonString)));
 	}
 
 	@Test
 	public void flattenObjectWithDelimiterToObject() {
 		String jsonString = "{ \"a\": { \"b\": 1 }}";
 		JSONObject jsonObject = new JSONObject(jsonString);
-		Flat.flattenToJSONObject(jsonObject, "-");
+		String flatJsonString = "{ \"a-b\": 1 }}";
+		assertTrue("The flattened is not similar to the expected value. ", 
+				Flat.flattenToJSONObject(jsonObject, "-").similar(new JSONObject(flatJsonString)));
 	}
 
 	@Test
 	public void unflattenStringNoDelimiter() {
-		String jsonString = "{ \"a.b\": 1 }}";
-		Flat.unflatten(jsonString);
+		String jsonString = "{ \"a\": { \"b\": 1 }}";
+		String flatJsonString = "{ \"a.b\": 1 }}";
+		assertTrue("The unflattened is not similar to the expected value. ", 
+				new JSONObject(Flat.unflatten(flatJsonString)).similar(new JSONObject(jsonString)));
 	}
 
 	@Test
 	public void unflattenStringWithDelimiter() {
-		String jsonString = "{ \"a-b\": 1 }}";
-		Flat.unflatten(jsonString, "-");
+		String jsonString = "{ \"a\": { \"b\": 1 }}";
+		String flatJsonString = "{ \"a-b\": 1 }}";
+		assertTrue("The unflattened is not similar to the expected value. ", 
+				new JSONObject(Flat.unflatten(flatJsonString, "-")).similar(new JSONObject(jsonString)));
 	}
 
 	@Test
 	public void unflattenObjectNoDelimiter() {
-		String jsonString = "{ \"a.b\": 1 }}";
-		JSONObject jsonObject = new JSONObject(jsonString);
-		Flat.unflatten(jsonObject);
+		String jsonString = "{ \"a\": { \"b\": 1 }}";
+		String flatJsonString = "{ \"a.b\": 1 }}";
+		JSONObject flatJsonObject = new JSONObject(flatJsonString);
+		assertTrue("The unflattened is not similar to the expected value. ", 
+				new JSONObject(Flat.unflatten(flatJsonObject)).similar(new JSONObject(jsonString)));
 	}
 
 	@Test
 	public void unflattenObjectWithDelimiter() {
-		String jsonString = "{ \"a-b\": 1 }}";
-		JSONObject jsonObject = new JSONObject(jsonString);
-		Flat.unflatten(jsonObject, "-");
+		String jsonString = "{ \"a\": { \"b\": 1 }}";
+		String flatJsonString = "{ \"a-b\": 1 }}";
+		JSONObject flatJsonObject = new JSONObject(flatJsonString);
+		assertTrue("The unflattened is not similar to the expected value. ", 
+				new JSONObject(Flat.unflatten(flatJsonObject, "-")).similar(new JSONObject(jsonString)));
 	}
 
 	@Test
 	public void unflattenStringNoDelimiterToObject() {
-		String jsonString = "{ \"a.b\": 1 }}";
-		Flat.unflattenToJSONObject(jsonString);
+		String jsonString = "{ \"a\": { \"b\": 1 }}";
+		String flatJsonString = "{ \"a.b\": 1 }}";
+		assertTrue("The unflattened is not similar to the expected value. ", 
+				Flat.unflattenToJSONObject(flatJsonString).similar(new JSONObject(jsonString)));
 	}
 
 	@Test
 	public void unflattenStringWithDelimiterToObject() {
-		String jsonString = "{ \"a-b\": 1 }}";
-		Flat.unflattenToJSONObject(jsonString, "-");
+		String jsonString = "{ \"a\": { \"b\": 1 }}";
+		String flatJsonString = "{ \"a-b\": 1 }}";
+		assertTrue("The unflattened is not similar to the expected value. ", 
+				Flat.unflattenToJSONObject(flatJsonString, "-").similar(new JSONObject(jsonString)));
 	}
 
 	@Test
 	public void unflattenObjectNoDelimiterToObject() {
-		String jsonString = "{ \"a.b\": 1 }}";
-		JSONObject jsonObject = new JSONObject(jsonString);
-		Flat.unflattenToJSONObject(jsonObject);
+		String jsonString = "{ \"a\": { \"b\": 1 }}";
+		String flatJsonString = "{ \"a.b\": 1 }}";
+		JSONObject flatJsonObject = new JSONObject(flatJsonString);
+		assertTrue("The unflattened is not similar to the expected value. ", 
+				Flat.unflattenToJSONObject(flatJsonObject).similar(new JSONObject(jsonString)));
 	}
 
 	@Test
 	public void unflattenObjectWithDelimiterToObject() {
-		String jsonString = "{ \"a-b\": 1 }}";
-		JSONObject jsonObject = new JSONObject(jsonString);
-		Flat.unflattenToJSONObject(jsonObject, "-");
+		String jsonString = "{ \"a\": { \"b\": 1 }}";
+		String flatJsonString = "{ \"a-b\": 1 }}";
+		JSONObject flatJsonObject = new JSONObject(flatJsonString);
+		assertTrue("The unflattened is not similar to the expected value. ", 
+				Flat.unflattenToJSONObject(flatJsonObject, "-").similar(new JSONObject(jsonString)));
 	}
 
 	@Test
