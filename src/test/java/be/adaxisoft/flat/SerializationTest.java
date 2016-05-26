@@ -106,6 +106,22 @@ public class SerializationTest {
 		assertTrue("The unflattened is not similar to the expected value", expectedJsonObject.similar(unflattenedJsonObject));
 	}
 
+	@Test
+	public void testFlattenNull () {
+		JSONObject jsonObject = new JSONObject("{ \"a\": null }");
+		JSONObject expectedObject = new JSONObject("{ \"a\": null }");
+		JSONObject unflattenedJsonObject = Flat.flattenToJSONObject(jsonObject);
+		assertTrue("The unflattened is not similar to the expected value. "  + unflattenedJsonObject, expectedObject.similar(unflattenedJsonObject));
+	}
+
+	@Test
+	public void testUnFlattenNull () {
+		JSONObject jsonObject = new JSONObject("{ \"a\": null }");
+		JSONObject expectedObject = new JSONObject("{ \"a\": null }");
+		JSONObject unflattenedJsonObject = Flat.unflattenToJSONObject(jsonObject);
+		assertTrue("The unflattened is not similar to the expected value. "  + unflattenedJsonObject, expectedObject.similar(unflattenedJsonObject));
+	}
+
 	@Test(expected=IllegalArgumentException.class)
 	public void illegalArgument() {
 		String jsonString = "{ \"a.b\": 1 }";

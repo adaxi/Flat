@@ -171,6 +171,9 @@ public class Flat {
 			sb.append("\"").append(parent).append("\"").append(":");
 			Integer integer = (Integer) value;
 			sb.append(integer);
+		} else if (JSONObject.NULL.equals(value)) {
+			sb.append("\"").append(parent).append("\"").append(":");
+			sb.append("null");
 		}
 
 		return sb.toString();
