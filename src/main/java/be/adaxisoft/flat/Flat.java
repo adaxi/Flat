@@ -347,10 +347,6 @@ public class Flat {
 						if (jsonObject.has(keys[j])) {
 							parent = json;
 							json = jsonObject.get(keys[j]);
-							// Assert that we are not handling a leaf
-							if (!(json instanceof JSONArray) && !(json instanceof JSONObject)) {
-								throw new AssertionError("Unhandled object type");
-							}
 						} else {
 							if (isNumber(keys[j + 1])) {
 								parent = json;
@@ -370,10 +366,6 @@ public class Flat {
 							if (!jsonArray.isNull(index)) {
 								parent = json;
 								json = jsonArray.get(index);
-								// Assert that we are not handling a leaf
-								if (!(json instanceof JSONArray) && !(json instanceof JSONObject)) {
-									throw new AssertionError("Unhandled object type");
-								}
 							} else {
 								if (isNumber(keys[j + 1])) {
 									parent = json;
@@ -407,8 +399,6 @@ public class Flat {
 								jsonObject.put(keys[j], json);
 							}
 						}
-					} else {
-						throw new AssertionError("Unhandled object type");
 					}
 				}
 			}
