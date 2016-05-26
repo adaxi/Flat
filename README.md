@@ -1,7 +1,7 @@
 Flat
 ====
 
-[![Build Status](https://travis-ci.org/adaxi/Flat.svg?branch=master)](https://travis-ci.org/adaxi/Flat)
+[![Build Status](https://travis-ci.org/adaxi/Flat.svg?branch=master)](https://travis-ci.org/adaxi/Flat) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/6076ee95c7314c9d8ffab07e490c0555)](https://www.codacy.com/app/dev_25/Flat?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=adaxi/Flat&amp;utm_campaign=Badge_Grade)
 
 This library flattens JSON files.
 
