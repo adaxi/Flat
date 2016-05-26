@@ -58,6 +58,7 @@
 				<configuration>
 					<forkCount>1</forkCount>
 					<reuseForks>true</reuseForks>
+					<argLine>${argLine}</argLine>
 				</configuration>
 				<executions>
 					<execution>
@@ -190,6 +191,4 @@
 			</build>
 		</profile>
 	</profiles>
-
-
 </project>
