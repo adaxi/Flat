@@ -9,7 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-public class SerializationTest {
+public class FunctionalTest {
 
 	private String complexJson = "{ "
 			+ " \"string\": \"aString\", "

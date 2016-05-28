@@ -29,7 +29,7 @@ After:
 }
 ```
 
-The library can do the revese operation as well: unflatten.
+The library can do the reverse operation as well: unflatten.
 
 
 Use the library
